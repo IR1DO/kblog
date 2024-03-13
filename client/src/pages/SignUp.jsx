@@ -34,7 +34,6 @@ export default function SignUp() {
       }
 
       if (res.ok) {
-        console.log(res);
         navigate('/sign-in');
       }
     } catch (error) {
@@ -55,12 +54,7 @@ export default function SignUp() {
             Blog
           </Link>
           <p className='text-md my-5'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque iste
-            fugiat aliquid vitae ea minima temporibus harum facere quod,
-            nesciunt ut soluta dolore repellat earum hic iure laborum?
-            Repellendus, nemo omnis quod ab corrupti odio excepturi, totam id
-            sit cumque, modi consectetur facere veritatis. Vel optio culpa a
-            aliquid laborum.
+            You can sign up with your email and password.
           </p>
         </div>
 
