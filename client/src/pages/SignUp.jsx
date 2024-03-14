@@ -74,7 +74,7 @@ export default function SignUp() {
             <div>
               <Label className='text-lg' value='Your email' />
               <TextInput
-                type='text'
+                type='email'
                 placeholder='Email'
                 id='email'
                 onChange={handleChange}
