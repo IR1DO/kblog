@@ -1,5 +1,6 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react';
 import { Link, useLocation } from 'react-router-dom';
+import { IconContext } from 'react-icons';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
@@ -38,12 +39,24 @@ export default function Header() {
 
       <div className='flex gap-2 md:order-2'>
         <Button
-          className='w-12 h-10 inline'
+          className='w-12 h-10 inline [&>span]:justify-center'
           color='gray'
           pill
           onClick={() => dispatch(toggleTheme())}
         >
-          {theme === 'light' ? <FaMoon /> : <FaSun />}
+          {theme === 'light' ? (
+            <IconContext.Provider value={{ size: '1.1rem' }}>
+              <div>
+                <FaMoon />
+              </div>
+            </IconContext.Provider>
+          ) : (
+            <IconContext.Provider value={{ size: '1.1rem' }}>
+              <div>
+                <FaSun />
+              </div>
+            </IconContext.Provider>
+          )}
         </Button>
         {currentUser ? (
           <Dropdown
