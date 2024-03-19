@@ -1,4 +1,4 @@
-import { Alert, Button, TextInput } from 'flowbite-react';
+import { Alert, Button, Dropdown, TextInput } from 'flowbite-react';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -36,6 +36,29 @@ export default function DashProfile() {
       setImageFile(file);
       setImageFileUrl(URL.createObjectURL(file));
     }
+  };
+
+  const handleImageDelete = () => {
+    // reset image upload state
+    setImageFileUploadError(null);
+    setImageFileUploadProgress(null);
+
+    // reset update state
+    setUpdateUserSuccess(null);
+    setUpdateUserError(null);
+
+    // clear the input value
+    filePickerRef.current.value = '';
+
+    const defaultUrl =
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/768px-Windows_10_Default_Profile_Picture.svg.png?20221210150350';
+
+    setImageFile(null);
+    setImageFileUrl(defaultUrl);
+    setFormData((formData) => ({
+      ...formData,
+      profilePicture: defaultUrl,
+    }));
   };
 
   const handleChange = (e) => {
@@ -151,45 +174,55 @@ export default function DashProfile() {
           ref={filePickerRef}
           className='hidden'
         />
-        <div
-          className='relative w-28 h-28 mb-3 self-center cursor-pointer shadow-md overflow-hidden rounded-full '
-          onClick={() => filePickerRef.current.click()}
-        >
-          {imageFileUploadProgress && (
-            <CircularProgressbar
-              value={imageFileUploadProgress || 0}
-              text={
-                imageFileUploadProgress < 100
-                  ? `${imageFileUploadProgress} %`
-                  : null
-              }
-              strokeWidth={5}
-              styles={{
-                root: {
-                  width: '100%',
-                  height: '100%',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                },
-                path: {
-                  stroke: `rgba(62, 152, 199, ${
-                    imageFileUploadProgress / 100
-                  })`,
-                },
-              }}
-            />
+
+        <Dropdown
+          placement='right'
+          renderTrigger={() => (
+            <div className='relative w-28 h-28 mb-3 self-center cursor-pointer shadow-md overflow-hidden rounded-full '>
+              {imageFileUploadProgress && (
+                <CircularProgressbar
+                  value={imageFileUploadProgress || 0}
+                  text={
+                    imageFileUploadProgress < 100
+                      ? `${imageFileUploadProgress} %`
+                      : null
+                  }
+                  strokeWidth={5}
+                  styles={{
+                    root: {
+                      width: '100%',
+                      height: '100%',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                    },
+                    path: {
+                      stroke: `rgba(62, 152, 199, ${
+                        imageFileUploadProgress / 100
+                      })`,
+                    },
+                  }}
+                />
+              )}
+              <img
+                src={imageFileUrl || currentUser.profilePicture}
+                alt='profile-picture'
+                className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
+                  imageFileUploadProgress &&
+                  imageFileUploadProgress < 100 &&
+                  'opacity-60'
+                }`}
+              />
+            </div>
           )}
-          <img
-            src={imageFileUrl || currentUser.profilePicture}
-            alt='profile-picture'
-            className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
-              imageFileUploadProgress &&
-              imageFileUploadProgress < 100 &&
-              'opacity-60'
-            }`}
-          />
-        </div>
+        >
+          <Dropdown.Item onClick={() => filePickerRef.current.click()}>
+            Change avatar
+          </Dropdown.Item>
+          <Dropdown.Item onClick={handleImageDelete} className='!text-red-500'>
+            Delete avatar
+          </Dropdown.Item>
+        </Dropdown>
 
         {imageFileUploadError && (
           <Alert color='failure'>{imageFileUploadError}</Alert>
