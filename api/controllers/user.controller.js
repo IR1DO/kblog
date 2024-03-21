@@ -12,13 +12,6 @@ const updateUser = async (req, res, next) => {
     return next(errorHandler(403, 'You are not allowed to update this user'));
   }
 
-  if (req.body.password) {
-    if (req.body.password.length < 4) {
-      return next(errorHandler(400, 'Password must be at least 4 characters'));
-    }
-    req.body.password = bcryptjs.hashSync(req.body.password, 10);
-  }
-
   if (req.body.username) {
     if (req.body.username.length < 3 || req.body.username.length > 20) {
       return next(
@@ -39,6 +32,13 @@ const updateUser = async (req, res, next) => {
         errorHandler(400, 'Username can only contain letters and numbers')
       );
     }
+  }
+
+  if (req.body.password) {
+    if (req.body.password.length < 4) {
+      return next(errorHandler(400, 'Password must be at least 4 characters'));
+    }
+    req.body.password = bcryptjs.hashSync(req.body.password, 10);
   }
 
   try {

@@ -17,10 +17,6 @@ const signup = async (req, res, next) => {
     return next(errorHandler(400, 'All fields are required'));
   }
 
-  if (password.length < 4) {
-    return next(errorHandler(400, 'Password must be at least 4 characters'));
-  }
-
   if (username.length < 3 || req.body.username.length > 20) {
     return next(
       errorHandler(400, 'Usernamem must be between 3 and 20 characters')
@@ -39,6 +35,10 @@ const signup = async (req, res, next) => {
     return next(
       errorHandler(400, 'Username can only contain letters and numbers')
     );
+  }
+
+  if (password.length < 4) {
+    return next(errorHandler(400, 'Password must be at least 4 characters'));
   }
 
   const hashedPassword = bcrybtjs.hashSync(password, 10);
