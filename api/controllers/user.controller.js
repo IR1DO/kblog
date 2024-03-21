@@ -13,8 +13,8 @@ const updateUser = async (req, res, next) => {
   }
 
   if (req.body.password) {
-    if (req.body.password.length < 6) {
-      return next(errorHandler(400, 'Password must be at least 6 characters'));
+    if (req.body.password.length < 4) {
+      return next(errorHandler(400, 'Password must be at least 4 characters'));
     }
     req.body.password = bcryptjs.hashSync(req.body.password, 10);
   }

@@ -17,6 +17,30 @@ const signup = async (req, res, next) => {
     return next(errorHandler(400, 'All fields are required'));
   }
 
+  if (password.length < 4) {
+    return next(errorHandler(400, 'Password must be at least 4 characters'));
+  }
+
+  if (username.length < 3 || req.body.username.length > 20) {
+    return next(
+      errorHandler(400, 'Usernamem must be between 3 and 20 characters')
+    );
+  }
+
+  if (username.includes(' ')) {
+    return next(errorHandler(400, 'Usernamem cannot contain spaces'));
+  }
+
+  if (username != username.toLowerCase()) {
+    return next(errorHandler(400, 'Usernamem must be lowercase'));
+  }
+
+  if (!username.match(/^[a-zA-Z0-9]+$/)) {
+    return next(
+      errorHandler(400, 'Username can only contain letters and numbers')
+    );
+  }
+
   const hashedPassword = bcrybtjs.hashSync(password, 10);
 
   const newUser = new User({
@@ -75,7 +99,7 @@ const googleAuth = async (req, res, next) => {
     const user = await User.findOne({ email });
     if (user) {
       const token = jwt.sign(
-        { id: user._id, isAdmin: validUser.isAdmin },
+        { id: user._id, isAdmin: user.isAdmin },
         process.env.JWT_SECRET
       );
       const { password, ...rest } = user._doc;
