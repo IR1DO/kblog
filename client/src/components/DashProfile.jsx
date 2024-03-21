@@ -101,14 +101,14 @@ export default function DashProfile() {
       } else {
         dispatch(updateSuccess(data));
         setUpdateUserSuccess("User's profile updated successfully");
+
+        // reset formData state
+        setFormData({});
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
       setUpdateUserError(error.message);
     }
-
-    // reset formData state
-    setFormData({});
   };
 
   const handleDeleteUser = async () => {
@@ -330,7 +330,7 @@ export default function DashProfile() {
         </Alert>
       )}
 
-      {error && (
+      {!updateUserError && error && (
         <Alert color='failure' className='mt-5'>
           {error}
         </Alert>

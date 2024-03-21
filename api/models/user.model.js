@@ -21,7 +21,12 @@ const userSchema = new mongoose.Schema(
       default:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/768px-Windows_10_Default_Profile_Picture.svg.png?20221210150350',
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
+
   { timestamps: true }
 );
 
