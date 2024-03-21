@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Sidebar } from 'flowbite-react';
 import { HiArrowSmRight, HiUser } from 'react-icons/hi';
-import { useDispatch } from 'react-redux';
+import { IoCreate } from 'react-icons/io5';
+import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../app/user/userSlice';
 
 export default function DashSidebar() {
+  const { currentUser } = useSelector((state) => state.user);
   const location = useLocation();
   const dispatch = useDispatch();
   const [tab, setTab] = useState('');
@@ -39,17 +41,25 @@ export default function DashSidebar() {
     <Sidebar className='w-full md:w-56'>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-          <Link to='/dashboard?tab=profile'>
+          <Sidebar.Item
+            active={tab === 'profile'}
+            icon={HiUser}
+            label={'User'}
+            labelColor='dark'
+            href='/dashboard?tab=profile'
+          >
+            Profile
+          </Sidebar.Item>
+
+          {currentUser.isAdmin && (
             <Sidebar.Item
-              active={tab === 'profile'}
-              icon={HiUser}
-              label={'User'}
-              labelColor='dark'
-              as='div'
+              // active={tab === 'profile'}
+              icon={IoCreate}
+              href='/create-post'
             >
-              Profile
+              Create Post
             </Sidebar.Item>
-          </Link>
+          )}
 
           <Sidebar.Item
             icon={HiArrowSmRight}
