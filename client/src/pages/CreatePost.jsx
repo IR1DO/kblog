@@ -12,7 +12,7 @@ export default function CreatePost() {
       </div>
 
       {/* profile... */}
-      <div className='p-3 max-w-3xl min-w-[60%] mx-auto min-h-screen'>
+      <div className='p-3 w-9/12 mx-auto min-h-screen '>
         <h1 className='text-center text-3xl my-7 font-semibold'>
           Create a post
         </h1>
@@ -58,7 +58,7 @@ export default function CreatePost() {
           <ReactQuill
             theme='snow'
             placeholder='Write something...'
-            className='h-72 mb-12 [&_.ql-editor]:font-mono [&_.ql-editor]:text-lg [&_.ql-editor]:'
+            className='h-72 mb-12 [&_.ql-editor]:font-mono [&_.ql-editor]:text-lg'
             required
           />
           <Button
