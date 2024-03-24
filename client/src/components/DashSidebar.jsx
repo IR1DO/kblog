@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Sidebar } from 'flowbite-react';
-import { HiArrowSmRight, HiUser } from 'react-icons/hi';
+import { HiArrowSmRight, HiDocumentText, HiUser } from 'react-icons/hi';
 import { IoCreate } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../app/user/userSlice';
@@ -45,7 +45,7 @@ export default function DashSidebar() {
             <Sidebar.Item
               active={tab === 'profile'}
               icon={HiUser}
-              label={'User'}
+              label={currentUser.isAdmin ? 'Admin' : 'User'}
               labelColor='dark'
               as='div'
             >
@@ -54,16 +54,29 @@ export default function DashSidebar() {
           </Link>
 
           {currentUser.isAdmin && (
-            <Link to='/create-post'>
-              <Sidebar.Item
-                active={location.pathname === '/create-post'}
-                icon={IoCreate}
-                as='div'
-                className='mt-2'
-              >
-                Create Post
-              </Sidebar.Item>
-            </Link>
+            <>
+              <Link to='/create-post'>
+                <Sidebar.Item
+                  active={location.pathname === '/create-post'}
+                  icon={IoCreate}
+                  as='div'
+                  className='mt-2'
+                >
+                  Create Post
+                </Sidebar.Item>
+              </Link>
+
+              <Link to='/dashboard?tab=posts'>
+                <Sidebar.Item
+                  active={tab === 'posts'}
+                  icon={HiDocumentText}
+                  as='div'
+                  className='mt-2'
+                >
+                  Posts
+                </Sidebar.Item>
+              </Link>
+            </>
           )}
 
           <Sidebar.Item
