@@ -12,7 +12,7 @@ import {
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import Cropper from 'react-easy-crop';
+import ImageCropDialog from '../components/ImageCropDialog';
 
 export default function CreatePost() {
   const [file, setFile] = useState(null);
@@ -21,8 +21,8 @@ export default function CreatePost() {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [formData, setFormData] = useState({});
 
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
+  const [crop, setCrop] = useState(false);
+  // const [imageStyle, setImageStyle] = useState(null);
 
   const handleUploadImage = async () => {
     try {
@@ -34,6 +34,7 @@ export default function CreatePost() {
       // reset image upload state
       setImageFileUploading(true);
       setImageUploadError(null);
+      setCrop(false);
 
       const storage = getStorage(app);
       const fileName = new Date().getTime() + '-' + file.name;
@@ -60,13 +61,24 @@ export default function CreatePost() {
           });
         }
       );
-
-      console.log(imageUploadProgress, imageUploadError);
     } catch (error) {
       setImageUploadError('Image upload failed: ' + error);
       setImageUploadProgress(null);
       console.log(error);
     }
+  };
+
+  const handleCropComplete = (croppedArea) => {
+    // const imageStyle = {
+    //   x: croppedArea.x,
+    //   y: croppedArea.y,
+    //   width: croppedArea.width,
+    //   height: croppedArea.height,
+    // };
+    // setImageStyle(imageStyle);
+
+    console.log(croppedArea);
+    setCrop(false);
   };
 
   return (
@@ -139,25 +151,21 @@ export default function CreatePost() {
             <Alert color='failure'>{imageUploadError}</Alert>
           )}
 
-          {formData.image && (
-            // <div className='w-full aspect-[5/2] relative'>
-            //   <Cropper
-            //     image={formData.image}
-            //     crop={crop}
-            //     zoom={zoom}
-            //     aspect={5 / 2} // 设置所需的宽高比例
-            //     onCropChange={setCrop}
-            //     onZoomChange={setZoom}
-            //   />
-            //   croppedArea
-            // </div>
+          {formData.image && !crop && (
             <img
               src={formData.image}
               alt='upload'
-              className='w-full aspect-[5/2] object-cover cursor-pointer'
+              className='w-full aspect-[5/2] relative cursor-pointer object-cover'
               onClick={() => {
-                alert('test');
+                setCrop(true);
               }}
+            />
+          )}
+
+          {crop && (
+            <ImageCropDialog
+              image={formData.image}
+              onComplete={handleCropComplete}
             />
           )}
 
