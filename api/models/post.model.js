@@ -20,6 +20,10 @@ const postSchema = new mongoose.Schema(
       default:
         'https://blog.berocket.com/wp-content/uploads/2020/09/97001ed5f3bc56eaefc1152c604184a6.png',
     },
+    imageStyle: {
+      type: Object,
+      default: {},
+    },
     category: {
       type: String,
       default: 'uncategorized',
