@@ -2,7 +2,7 @@ import { Select, TextInput, FileInput, Button, Alert } from 'flowbite-react';
 import DashSidebar from '../components/DashSidebar';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   getDownloadURL,
   getStorage,
@@ -24,6 +24,11 @@ export default function CreatePost() {
   const [crop, setCrop] = useState(false);
   const [imageStyle, setImageStyle] = useState({});
 
+  // Ensure that imageStyle is cleared only after the image update is finished
+  useEffect(() => {
+    setImageStyle({});
+  }, [formData.image]);
+
   const handleUploadImage = async () => {
     try {
       if (!file) {
@@ -35,12 +40,12 @@ export default function CreatePost() {
       setImageFileUploading(true);
       setImageUploadError(null);
       setCrop(false);
-      setImageStyle({});
 
       const storage = getStorage(app);
       const fileName = new Date().getTime() + '-' + file.name;
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
+
       uploadTask.on(
         'state_changed',
         (snapshot) => {
