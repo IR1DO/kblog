@@ -178,7 +178,7 @@ export default function CreatePost() {
           <ReactQuill
             theme='snow'
             placeholder='Write something...'
-            className='h-72 mb-12 [&_.ql-editor]:font-mono [&_.ql-editor]:text-lg'
+            className='h-72 mb-12 [&_.ql-editor]:font-mono [&_.ql-editor]:text-lg [&_.ql-editor::before]:dark:text-[rgba(255,255,255,0.6)] [&_.ql-picker]:dark:text-white [&_.ql-picker-options]:dark:bg-slate-400 [&_.ql-toolbar]:dark:bg-slate-400'
             required
           />
           <Button
