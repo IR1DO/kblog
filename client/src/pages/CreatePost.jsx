@@ -22,7 +22,7 @@ export default function CreatePost() {
   const [formData, setFormData] = useState({});
 
   const [crop, setCrop] = useState(false);
-  // const [imageStyle, setImageStyle] = useState(null);
+  const [imageStyle, setImageStyle] = useState({});
 
   const handleUploadImage = async () => {
     try {
@@ -35,6 +35,7 @@ export default function CreatePost() {
       setImageFileUploading(true);
       setImageUploadError(null);
       setCrop(false);
+      setImageStyle({});
 
       const storage = getStorage(app);
       const fileName = new Date().getTime() + '-' + file.name;
@@ -69,15 +70,16 @@ export default function CreatePost() {
   };
 
   const handleCropComplete = (croppedArea) => {
-    // const imageStyle = {
-    //   x: croppedArea.x,
-    //   y: croppedArea.y,
-    //   width: croppedArea.width,
-    //   height: croppedArea.height,
-    // };
-    // setImageStyle(imageStyle);
+    const SCALE = { x: 100 / croppedArea.width, y: 100 / croppedArea.height };
 
-    console.log(croppedArea);
+    const imageStyle = {
+      left: `${-croppedArea.x * SCALE.x}%`,
+      top: `${-croppedArea.y * SCALE.y}%`,
+
+      transform: `scale(${SCALE.x}, ${SCALE.x})`,
+    };
+    setImageStyle(imageStyle);
+
     setCrop(false);
   };
 
@@ -152,14 +154,17 @@ export default function CreatePost() {
           )}
 
           {formData.image && !crop && (
-            <img
-              src={formData.image}
-              alt='upload'
-              className='w-full aspect-[5/2] relative cursor-pointer object-cover'
-              onClick={() => {
-                setCrop(true);
-              }}
-            />
+            <div className='w-full aspect-[5/2] relative overflow-hidden'>
+              <img
+                src={formData.image}
+                alt='upload'
+                className='w-full absolute origin-top-left'
+                style={imageStyle}
+                onClick={() => {
+                  setCrop(true);
+                }}
+              />
+            </div>
           )}
 
           {crop && (
