@@ -55,9 +55,9 @@ export default function DashSidebar() {
 
           {currentUser.isAdmin && (
             <>
-              <Link to='/create-post'>
+              <Link to='/dashboard?tab=create-post'>
                 <Sidebar.Item
-                  active={location.pathname === '/create-post'}
+                  active={tab === 'create-post'}
                   icon={IoCreate}
                   as='div'
                   className='mt-2'

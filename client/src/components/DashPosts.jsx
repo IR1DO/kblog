@@ -100,7 +100,7 @@ export default function DashPosts() {
 
                   <Table.Cell>
                     <Link to={`/post/${post.slug}`}>
-                      <div className='w-20 aspect-[5/2] relative overflow-hidden bg-gray-500'>
+                      <div className='w-20 aspect-[16/9] relative overflow-hidden bg-gray-500'>
                         <img
                           src={post.image}
                           alt={post.titel}

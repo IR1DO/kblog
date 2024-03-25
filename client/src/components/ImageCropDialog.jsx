@@ -13,12 +13,12 @@ export default function ImageCropDialog({ image, onComplete }) {
 
   return (
     <div className='flex flex-col gap-4'>
-      <div className='w-full aspect-[5/2] relative'>
+      <div className='w-full aspect-[16/9] relative'>
         <Cropper
           image={image}
           crop={crop}
           zoom={zoom}
-          aspect={5 / 2}
+          aspect={16 / 9}
           onCropChange={setCrop}
           onZoomChange={setZoom}
           onCropComplete={onCropComplete}

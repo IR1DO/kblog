@@ -1,7 +1,7 @@
 import { Select, TextInput, FileInput, Button, Alert } from 'flowbite-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   getDownloadURL,
   getStorage,
@@ -21,11 +21,9 @@ export default function CreatePost() {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
-
   const navigate = useNavigate();
 
   const [crop, setCrop] = useState(false);
-  const [imageStyle, setImageStyle] = useState({});
 
   const handleUploadImage = async () => {
     try {
@@ -60,9 +58,12 @@ export default function CreatePost() {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setImageUploadProgress(null);
             setImageUploadError(null);
-            setFormData({ ...formData, image: downloadURL });
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              image: downloadURL,
+              imageStyle: {},
+            }));
             setImageFileUploading(false);
-            setImageStyle({});
           });
         }
       );
@@ -107,14 +108,12 @@ export default function CreatePost() {
 
       transform: `scale(${SCALE.x}, ${SCALE.x})`,
     };
-    setImageStyle(imageStyle);
-
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      imageStyle: imageStyle,
+    }));
     setCrop(false);
   };
-
-  useEffect(() => {
-    setFormData((prevData) => ({ ...prevData, imageStyle: imageStyle }));
-  }, [imageStyle]);
 
   return (
     <div className='p-3 w-9/12 mx-auto min-h-screen '>
@@ -129,14 +128,20 @@ export default function CreatePost() {
             className='[&_input]:text-base flex-1'
             required
             onChange={(e) => {
-              setFormData({ ...formData, title: e.target.value });
+              setFormData((prevFormData) => ({
+                ...prevFormData,
+                title: e.target.value,
+              }));
             }}
           />
 
           <Select
             className='[&_select]:text-base'
             onChange={(e) => {
-              setFormData({ ...formData, category: e.target.value });
+              setFormData((prevFormData) => ({
+                ...prevFormData,
+                category: e.target.value,
+              }));
             }}
           >
             <option value='uncategorized'>Select a category</option>
@@ -182,12 +187,12 @@ export default function CreatePost() {
         {imageUploadError && <Alert color='failure'>{imageUploadError}</Alert>}
 
         {formData.image && !crop && (
-          <div className='w-full aspect-[5/2] relative overflow-hidden'>
+          <div className='w-full aspect-[16/9] relative overflow-hidden'>
             <img
               src={formData.image}
               alt='upload'
               className='w-full absolute origin-top-left'
-              style={imageStyle}
+              style={formData.imageStyle}
               onClick={() => {
                 setCrop(true);
               }}
@@ -208,7 +213,10 @@ export default function CreatePost() {
           className='h-72 mb-12 [&_.ql-editor]:font-mono [&_.ql-editor]:text-lg [&_.ql-editor::before]:dark:text-[rgba(255,255,255,0.6)] [&_.ql-picker]:dark:text-white [&_.ql-picker-options]:dark:bg-slate-400 [&_.ql-toolbar]:dark:bg-slate-400 [&_h1]:pb-4 [&_h1]:pt-12 [&_h2]:pb-2 [&_h2]:pt-9 [&_h3]:pb-2 [&_h3]:pt-6'
           required
           onChange={(value) => {
-            setFormData({ ...formData, content: value });
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              content: value,
+            }));
           }}
         />
 
