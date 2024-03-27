@@ -19,11 +19,11 @@ export default function DashUsers() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch(`api/user/getusers`);
+        const res = await fetch(`api/user/getusers?sort=asc`);
         const data = await res.json();
         if (res.ok) {
           setUsers(data.users);
-          if (data.users.length <= 9) {
+          if (data.users.length < 9) {
             setShowMore(false);
           }
         }
@@ -41,7 +41,9 @@ export default function DashUsers() {
     const startIndex = users.length;
 
     try {
-      const res = await fetch(`/api/user/getusers?startIndex=${startIndex}`);
+      const res = await fetch(
+        `/api/user/getusers?startIndex=${startIndex}&sort=asc`
+      );
       const data = await res.json();
       if (res.ok) {
         setUsers((prev) => [...prev, ...data.users]);
