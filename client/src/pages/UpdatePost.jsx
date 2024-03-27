@@ -230,7 +230,7 @@ export default function UpdatePost() {
           )}
 
           {formData.image && !crop && (
-            <div className='w-full aspect-[16/9] relative overflow-hidden'>
+            <div className='w-full aspect-[16/9] relative overflow-hidden cursor-pointer'>
               <img
                 src={formData.image}
                 alt='upload'
