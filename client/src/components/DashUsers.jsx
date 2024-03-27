@@ -1,8 +1,10 @@
-import { Button, Modal, Table } from 'flowbite-react';
+import { Button, Modal, Table, Alert } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import { deleteUserSuccess } from '../app/user/userSlice';
+import { useDispatch } from 'react-redux';
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user);
@@ -10,6 +12,9 @@ export default function DashUsers() {
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState('');
+  const [deleteError, setDeleteError] = useState(null);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -23,7 +28,7 @@ export default function DashUsers() {
           }
         }
       } catch (error) {
-        console.log(error.message);
+        setDeleteError(error.message);
       }
     };
 
@@ -45,7 +50,7 @@ export default function DashUsers() {
         }
       }
     } catch (error) {
-      console.log(error.message);
+      setDeleteError(error.message);
     }
   };
 
@@ -59,12 +64,17 @@ export default function DashUsers() {
 
       const data = await res.json();
       if (!res.ok) {
-        console.log(data.message);
+        setDeleteError(data.message);
       } else {
         setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
+        setDeleteError(null);
+
+        if (currentUser._id === userIdToDelete) {
+          dispatch(deleteUserSuccess(data));
+        }
       }
     } catch (error) {
-      console.log(error.message);
+      setDeleteError(error.message);
     }
   };
 
@@ -171,6 +181,12 @@ export default function DashUsers() {
           </div>
         </Modal.Body>
       </Modal>
+
+      {deleteError && (
+        <Alert className='mt-5' color='failure'>
+          {deleteError}
+        </Alert>
+      )}
     </div>
   );
 }
