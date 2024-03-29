@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .post-content p {
+    @apply mb-4;
+    @apply text-lg;
+  }
+
+  .post-content h1 {
+    @apply text-5xl;
+    @apply font-bold;
+    @apply mb-4;
+    @apply mt-12;
+  }
+
+  .post-content h2 {
+    @apply text-4xl;
+    @apply font-semibold;
+    @apply mb-2;
+    @apply mt-9;
+  }
+
+  .post-content h3 {
+    @apply text-3xl;
+    @apply font-medium;
+    @apply mb-2;
+    @apply mt-6;
+  }
+
+  .post-content a {
+    @apply text-cyan-500;
+    @apply no-underline;
+    @apply hover:underline;
+  }
+}

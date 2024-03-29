@@ -43,7 +43,7 @@ export default function DashSidebar() {
   };
 
   return (
-    <Sidebar className='w-full md:w-56'>
+    <Sidebar className='w-full md:w-56 [&>div]:bg-slate-50'>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           <Link to='/dashboard?tab=profile'>
