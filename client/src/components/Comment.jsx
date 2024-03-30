@@ -12,6 +12,8 @@ export default function Comment({ comment }) {
 
         if (res.ok) {
           setUser(data);
+        } else {
+          setUser(null);
         }
       } catch (error) {
         console.log(error.message);
@@ -25,8 +27,12 @@ export default function Comment({ comment }) {
     <div className='flex p-2 border-b dark:border-gray-600'>
       <div className='felx-shrink-0 mr-3'>
         <img
-          src={user && user.profilePicture}
-          className='w-10 h-10 rounded-full bg-gray-200'
+          src={
+            user
+              ? user.profilePicture
+              : 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/768px-Windows_10_Default_Profile_Picture.svg.png?20221210150350'
+          }
+          className='w-10 h-10 rounded-full subpixel-antialiased'
           alt='user-profile-picture'
         />
       </div>
@@ -34,7 +40,7 @@ export default function Comment({ comment }) {
       <div className='flex-1'>
         <div className='flex items-center mb-1 gap-2'>
           <span className='font-sans font-bold mr-1 text-sm truncate'>
-            {user ? `@${user.username}` : 'anonymous user'}
+            {user ? `@${user.username}` : 'deleted account'}
           </span>
 
           <span className='text-gray-500 text-sm'>
