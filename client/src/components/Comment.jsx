@@ -4,7 +4,7 @@ import { FaThumbsUp } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
 
-export default function Comment({ comment, onLike, onEdit }) {
+export default function Comment({ comment, onLike, onEdit, onDelete }) {
   const [user, setUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editedComment, setEditedContent] = useState(comment.content);
@@ -49,6 +49,10 @@ export default function Comment({ comment, onLike, onEdit }) {
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  const handleDelete = async () => {
+    onDelete(comment._id);
   };
 
   return (
@@ -136,14 +140,36 @@ export default function Comment({ comment, onLike, onEdit }) {
               </div>
 
               {currentUser && currentUser._id === comment.userId && (
-                <button
-                  type='button'
-                  onClick={handleEdit}
-                  className='text-gray-400 hover:text-blue-500 hover:underline text-sm ml-2'
-                >
-                  Edit
-                </button>
+                <div className='flex gap-2'>
+                  <button
+                    type='button'
+                    onClick={handleEdit}
+                    className='text-gray-400 hover:text-blue-500 hover:underline text-sm ml-2'
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    type='button'
+                    onClick={handleDelete}
+                    className='text-red-400 hover:text-red-500 hover:underline text-sm ml-2'
+                  >
+                    Delete
+                  </button>
+                </div>
               )}
+
+              {currentUser &&
+                currentUser._id !== comment.userId &&
+                currentUser.isAdmin && (
+                  <button
+                    type='button'
+                    onClick={handleDelete}
+                    className='text-red-400 hover:text-red-500 hover:underline text-sm ml-2'
+                  >
+                    Delete
+                  </button>
+                )}
             </div>
           </>
         )}
