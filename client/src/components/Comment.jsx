@@ -87,7 +87,7 @@ export default function Comment({ comment, onLike, onEdit }) {
               }}
             />
 
-            <div className='flex justify-begin gap-2'>
+            <div className='flex justify-end gap-2'>
               <Button
                 type='button'
                 size='sm'
@@ -116,22 +116,24 @@ export default function Comment({ comment, onLike, onEdit }) {
               {comment.content}
             </p>
 
-            <div className='flex gap-2 h-4 items-center'>
-              <button
-                type='button'
-                onClick={() => onLike(comment._id)}
-                className={`text-gray-400 hover:text-blue-500 ${
-                  currentUser &&
-                  comment.likes.includes(currentUser._id) &&
-                  '!text-blue-500'
-                }`}
-              >
-                <FaThumbsUp className='text-sm' />
-              </button>
+            <div className='flex justify-between h-4 items-center'>
+              <div className='flex gap-2'>
+                <button
+                  type='button'
+                  onClick={() => onLike(comment._id)}
+                  className={`text-gray-400 hover:text-blue-500 ${
+                    currentUser &&
+                    comment.likes.includes(currentUser._id) &&
+                    '!text-blue-500'
+                  }`}
+                >
+                  <FaThumbsUp className='text-sm' />
+                </button>
 
-              <p className='text-sm text-gray-400'>
-                {comment.numberOfLikes > 0 && comment.numberOfLikes}
-              </p>
+                <p className='text-sm text-gray-400'>
+                  {comment.numberOfLikes > 0 && comment.numberOfLikes}
+                </p>
+              </div>
 
               {currentUser && currentUser._id === comment.userId && (
                 <button
