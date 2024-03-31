@@ -2,9 +2,12 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { FaThumbsUp } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import { Button, Textarea } from 'flowbite-react';
 
-export default function Comment({ comment, onLike }) {
+export default function Comment({ comment, onLike, onEdit }) {
   const [user, setUser] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedComment, setEditedContent] = useState(comment.content);
   const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -25,6 +28,28 @@ export default function Comment({ comment, onLike }) {
 
     getUser();
   }, [comment]);
+
+  const handleEdit = () => {
+    setIsEditing(true);
+    setEditedContent(comment.content);
+  };
+
+  const handleSave = async () => {
+    try {
+      const res = await fetch(`/api/comment/editComment/${comment._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: editedComment }),
+      });
+
+      if (res.ok) {
+        setIsEditing(false);
+        onEdit(comment._id, editedComment);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className='flex p-2 border-b dark:border-gray-600'>
@@ -51,27 +76,75 @@ export default function Comment({ comment, onLike }) {
           </span>
         </div>
 
-        <p className='text-gray-700 dark:text-slate-200 pb-2'>
-          {comment.content}
-        </p>
+        {isEditing ? (
+          <>
+            <Textarea
+              className='p-2 text-gray-700 rounded-md resize-none focus:outline-none focus:bg-gray-100'
+              rows='2'
+              value={editedComment}
+              onChange={(e) => {
+                setEditedContent(e.target.value);
+              }}
+            />
 
-        <div className='flex gap-2 h-4 items-center'>
-          <button
-            type='button'
-            onClick={() => onLike(comment._id)}
-            className={`text-gray-400 hover:text-blue-500 ${
-              currentUser &&
-              comment.likes.includes(currentUser._id) &&
-              '!text-blue-500'
-            }`}
-          >
-            <FaThumbsUp className='text-sm' />
-          </button>
+            <div className='flex justify-begin gap-2'>
+              <Button
+                type='button'
+                size='sm'
+                className='mt-2'
+                onClick={handleSave}
+              >
+                Save
+              </Button>
 
-          <p className='text-sm text-gray-400'>
-            {comment.numberOfLikes > 0 && comment.numberOfLikes}
-          </p>
-        </div>
+              <Button
+                color='failure'
+                type='button'
+                size='sm'
+                className='mt-2'
+                onClick={() => {
+                  setIsEditing(false);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <p className='text-gray-700 dark:text-slate-200 pb-2'>
+              {comment.content}
+            </p>
+
+            <div className='flex gap-2 h-4 items-center'>
+              <button
+                type='button'
+                onClick={() => onLike(comment._id)}
+                className={`text-gray-400 hover:text-blue-500 ${
+                  currentUser &&
+                  comment.likes.includes(currentUser._id) &&
+                  '!text-blue-500'
+                }`}
+              >
+                <FaThumbsUp className='text-sm' />
+              </button>
+
+              <p className='text-sm text-gray-400'>
+                {comment.numberOfLikes > 0 && comment.numberOfLikes}
+              </p>
+
+              {currentUser && currentUser._id === comment.userId && (
+                <button
+                  type='button'
+                  onClick={handleEdit}
+                  className='text-gray-400 hover:text-blue-500 hover:underline text-sm ml-2'
+                >
+                  Edit
+                </button>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
