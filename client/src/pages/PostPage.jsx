@@ -1,14 +1,16 @@
-import { Button, Spinner } from 'flowbite-react';
+import { Alert, Button, Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import CallToAction from '../components/CallToAction';
 import CommentSection from '../components/CommentSection';
+import PostCard from '../components/PostCard';
 
 export default function PostPage() {
   const { postSlug } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [post, setPost] = useState(null);
+  const [recentPosts, setRecentPosts] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -33,6 +35,23 @@ export default function PostPage() {
 
     fetchPost();
   }, [postSlug]);
+
+  useEffect(() => {
+    try {
+      const fetchRecentPosts = async () => {
+        const res = await fetch(`/api/post/getposts?limit=3`);
+        const data = await res.json();
+
+        if (res.ok) {
+          setRecentPosts(data.posts);
+        }
+      };
+
+      fetchRecentPosts();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [post]);
 
   if (loading) {
     return (
@@ -88,6 +107,23 @@ export default function PostPage() {
       </div>
 
       <CommentSection postId={post._id} />
+
+      <hr className='mt-5' />
+
+      <div className='flex flex-col justify-center items-center mb-5'>
+        <h1 className='text-xl mt-5'>Recent article</h1>
+
+        <div className='w-[90%] flex flex-col md:flex-row gap-4 mt-2'>
+          {recentPosts &&
+            recentPosts.map((post) => <PostCard key={post._id} post={post} />)}
+        </div>
+      </div>
+
+      {error && (
+        <Alert color='failure' className='mt-5'>
+          {error}
+        </Alert>
+      )}
     </main>
   );
 }
