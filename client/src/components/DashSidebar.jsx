@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Sidebar } from 'flowbite-react';
 import {
+  HiAnnotation,
   HiArrowSmRight,
   HiDocumentText,
   HiOutlineUserGroup,
@@ -90,6 +91,17 @@ export default function DashSidebar() {
                   className='mt-2'
                 >
                   Users
+                </Sidebar.Item>
+              </Link>
+
+              <Link to='/dashboard?tab=comments'>
+                <Sidebar.Item
+                  active={tab === 'comments'}
+                  icon={HiAnnotation}
+                  as='div'
+                  className='mt-2'
+                >
+                  Comments
                 </Sidebar.Item>
               </Link>
             </>

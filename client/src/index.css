@@ -34,4 +34,9 @@
     @apply no-underline;
     @apply hover:underline;
   }
+
+  .post-content img {
+    @apply w-48;
+    @apply mx-auto;
+  }
 }
