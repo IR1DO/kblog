@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 
-export default function PostCard({ post }) {
+export default function PostCard({ post, customize }) {
   return (
-    <div className='w-80 sm:w-[30rem] group mb-2 flex flex-col self-center shadow-md'>
+    <div
+      className={`${customize} w-80 sm:w-[30rem] group mb-2 flex flex-col self-center shadow-md`}
+    >
       <Link to={`/post/${post.slug}`}>
         <div className='aspect-[16/9] relative overflow-hidden bg-gray-500 group-hover:opacity-[.85] dark:group-hover:opacity-[.65] transition-all'>
           <img
